@@ -1,0 +1,24 @@
+html,
+body,
+#root {
+  font-family: "Noto Sans", "Roboto", "Open Sans", "sans-serif";
+  background-color: #f8f5f1;
+  max-width: 114rem;
+  margin: 0 auto;
+  padding: 0 0.3rem;
+  @media (min-width: 37.5em) {
+    padding: 0 1.875rem;
+  }
+  @media (min-width: 56.25em) {
+    padding: 0 3.125rem;
+  }
+  @media (min-width: 75em) {
+    padding: 0 3.125rem 0 1.25rem;
+    > div {
+      /* Calculation of padding is based on 13 columns and column gap
+       * where the first column is reserved for sticky header and share icons
+       */
+      padding-left: calc(100% / ${COLUMNS} + 1.25rem / ${COLUMNS});
+    }
+  }
+}

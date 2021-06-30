@@ -1,0 +1,20 @@
+{
+  "appHeader": {
+    "title": "Merit",
+    "description": "Merit pwa application"
+  },
+  "pageValues": {
+    "falseReport": "Felanmälan",
+    "inventory": "Inventering",
+    "return": "Uttag/Retur",
+    "felanmalan": "Felanmälan",
+    "inventering": "Inventering",
+    "uttag": "Uttag/Retur",
+    "logOut": "Utloggning"
+  },
+  "pageUrls": {
+    "falseReport": "felanmalan",
+    "return": "uttag",
+    "inventory": "inventering"
+  }
+}

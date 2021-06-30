@@ -1,0 +1,18 @@
+{
+  "appHeader": {
+    "title": "Merit",
+    "description": "Merit pwa application"
+  },
+  "meritTitle": "Merit",
+  "pageValues": {
+    "falseReport": "False Report",
+    "inventory": "Inventory",
+    "return": "return",
+    "logOut": "Log out"
+  },
+  "pageUrls": {
+    "falseReport": "falseReport",
+    "return": "return",
+    "inventory": "inventory"
+  }
+}

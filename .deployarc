@@ -1,0 +1,8 @@
+{
+  "locales": [
+    { "country": "gb", "languages": ["en"] },
+    { "country": "nl", "languages": ["nl"] },
+  ],
+  "hostPath": "merit",
+  "project": "meridies-pwa-app"
+}
