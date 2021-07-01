@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { navigate } from "@reach/router";
-import { TrendingUpRounded } from "@material-ui/icons";
+
 
 interface UseDirectNavigationAction {
   navigateToPages: () => void;
