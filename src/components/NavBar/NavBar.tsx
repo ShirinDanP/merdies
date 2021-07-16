@@ -11,13 +11,13 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { Menu, Close } from "@material-ui/icons";
+import { useMsal } from "@azure/msal-react";
 
 import useLocation from "../../hooks/useLocation";
 import usePageValues from "../../hooks/usePageValues";
 import useDirectNavigation from "../../hooks/useDirectNavigation";
 import LogoIcon from "../../assets/logoicon.svg";
 import MenuExpansion from "./MenuExpantion";
-import { on } from "process";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -27,18 +27,18 @@ const useStyles = makeStyles((theme) =>
       "&.MuiAccordion-rounded": {
         borderRadius: 0,
       },
+      padding: "5px",
     },
     content: {
       flexDirection: "row",
       justifyContent: "space-between",
-      height: "80px",
+      height: "75px",
     },
     menuIcon: {
       color: theme.palette.secondary.contrastText,
     },
     logo: {
-      height: "40px",
-      width: "40px",
+      width: "50px",
       marginRight: "10px",
     },
     logoContainer: {
@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme) =>
       justifyContent: "flex-end",
       padding: "0",
     },
+    accordionSummary: {
+      height: "75px",
+    },
   })
 );
 
@@ -61,6 +64,7 @@ const NavBar: React.FC = (): JSX.Element => {
   const location = useLocation();
   const [{ pageContext }, { onClickNavigationButton }] = useDirectNavigation();
   const [menuIcon, setMenuIcon] = useState<boolean>(false);
+  const { instance } = useMsal();
 
   const handleMenu = (): void => {
     setMenuIcon(!menuIcon);
@@ -72,6 +76,11 @@ const NavBar: React.FC = (): JSX.Element => {
       ? t("meritTitle")
       : t(`pageValues.${locationName}`);
 
+  const navigateAndCloseMenu = (value: string): void => {
+    onClickNavigationButton(value);
+    setMenuIcon(false);
+  };
+
   return (
     <AppBar>
       <Accordion
@@ -80,6 +89,7 @@ const NavBar: React.FC = (): JSX.Element => {
         onChange={handleMenu}
       >
         <AccordionSummary
+          className={classes.accordionSummary}
           expandIcon={
             menuIcon ? (
               <Close className={classes.menuIcon} />
@@ -101,7 +111,8 @@ const NavBar: React.FC = (): JSX.Element => {
           <MenuExpansion
             showPageTitle={showPageTitle}
             pageValues={pageValues}
-            onClickNavigationButton={onClickNavigationButton}
+            onClickNavigationButton={(value) => navigateAndCloseMenu(value)}
+            logOut={() => instance.logoutRedirect()}
           />
         </AccordionDetails>
       </Accordion>

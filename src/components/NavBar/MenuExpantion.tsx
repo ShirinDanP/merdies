@@ -1,12 +1,15 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ExitToApp } from "@material-ui/icons";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  makeStyles,
+  createStyles,
+} from "@material-ui/core";
 
 import { PageValues } from "../../types/types";
 
@@ -14,8 +17,9 @@ interface MenuExpansionProps {
   showPageTitle: string;
   pageValues: PageValues;
   onClickNavigationButton: (key: string) => void;
-
+  logOut: () => void;
 }
+
 const useStyles = makeStyles((theme) =>
   createStyles({
     list: {
@@ -40,7 +44,7 @@ const MenuExpansion: React.FC<MenuExpansionProps> = ({
   showPageTitle,
   pageValues,
   onClickNavigationButton,
-
+  logOut,
 }): JSX.Element => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -51,10 +55,9 @@ const MenuExpansion: React.FC<MenuExpansionProps> = ({
         {showPageTitle !== t("meritTitle") && (
           <>
             {Object.keys(pageValues).map((key: string, index: number) => (
-              <ListItem button>
+              <ListItem button key={index}>
                 <ListItemText
                   className={classes.itemText}
-                  key={index}
                   primary={pageValues[key]}
                   onClick={() => onClickNavigationButton(key)}
                 />
@@ -63,13 +66,14 @@ const MenuExpansion: React.FC<MenuExpansionProps> = ({
             <Divider className={classes.divider} />
           </>
         )}
-        <ListItem button>
+        <ListItem button onClick={() => logOut()}>
           <ListItemIcon className={classes.itemIcon}>
             <ExitToApp />
           </ListItemIcon>
           <ListItemText
             className={classes.itemText}
             primary={t("pageValues.logOut")}
+            onClick={() => logOut()}
           />
         </ListItem>
       </List>

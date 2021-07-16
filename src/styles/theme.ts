@@ -7,7 +7,12 @@ let theme = createMuiTheme({
       main: "#387C6D",
       contrastText: "#FFFFFF",
     },
+    // action: {
+    //   disabled: "white",
+    //   disabledBackground: "#81c0b2",
+    // },
   },
+
   typography: {
     subtitle1: {
       fontSize: 12,
@@ -19,6 +24,7 @@ let theme = createMuiTheme({
       backgroundColor: "#387C6D",
       height: "50px",
       fontSize: "16px",
+      textTransform: "none",
     },
   },
 });

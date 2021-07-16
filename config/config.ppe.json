@@ -1,6 +1,0 @@
-{
-  "api": "",
-  "clientId": "5dbdcb3b-65b3-4bcf-812a-981c16192874",
-  "authority": "https://login.microsoftonline.com/a4e2dfe8-e71a-4a2c-8c2a-95190521507a",
-  "redirectUri": "http://localhost:3000/"
-}

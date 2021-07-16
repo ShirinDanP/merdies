@@ -14,5 +14,65 @@
     "falseReport": "falseReport",
     "return": "return",
     "inventory": "inventory"
+  },
+  "components": {
+    "login": "Sign in",
+    "landingPage": {
+      "welcome": "Welcome"
+    },
+    "inventory": {
+      "button": "Submit inventory",
+      "fields": {
+        "articleNumber": "Article Number",
+        "name": "Name",
+        "dimenstion": "Dimension",
+        "balance": "Balance",
+        "date": "Date",
+        "repairable": "Repairable",
+        "place": "Place",
+        "unit": "Unit",
+        "number": "Number"
+      }
+    },
+    "return": {
+      "fields": {
+        "userName": "Username",
+        "AONumber": "AO-number",
+        "objectId": "Object id",
+        "company": "Company",
+        "account": "Account",
+        "title": "Title",
+        "activity": "Activity",
+        "KPlace": "K place",
+        "followUp": "Follow up"
+      },
+      "buttons": {
+        "next": "Next",
+        "add": "Add",
+        "inventory": "Inv-OK",
+        "done": "Done"
+      }
+    },
+    "reportFailure": {
+      "fields": {
+        "department": "Department",
+        "objectId": "ObjectId",
+        "description": "Description",
+        "discovery": "Discovery",
+        "symptom": "Symptom",
+        "uploadePictures": "Upload pictures",
+        "fieldsPlaceholder": "Choose an option"
+      },
+      "buttons": {
+        "selectFromGallery": "Select from gallery",
+        "takePicture": "Take a picture",
+        "submitFailureReport": "Submit failure"
+      }
+    },
+    "errors": {
+      "submissionSuccessFul": "Submission approved!",
+      "submissionErrorFailed": "Submission Failed. Probably you entered an information wrong. Please try again!",
+      "submissionFailed": "Oops! Something went wrong. Please Login and try it again!"
+    }
   }
 }

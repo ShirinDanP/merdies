@@ -5,6 +5,7 @@ body,
   background-color: #f8f5f1;
   max-width: 114rem;
   margin: 0 auto;
+  margin-bottom: 30px;
   padding: 0 0.3rem;
   @media (min-width: 37.5em) {
     padding: 0 1.875rem;

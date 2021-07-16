@@ -3,7 +3,7 @@
 process.env.COUNTRY = process.env.COUNTRY || 'se';
 process.env.LANGUAGE = process.env.LANGUAGE || 'sv';
 process.env.TARGET = process.env.TARGET || 'local';
-process.env.PORT = '8000';
+process.env.PORT = '3000';
 
 const merge = require('deepmerge');
 const fs = require('fs');

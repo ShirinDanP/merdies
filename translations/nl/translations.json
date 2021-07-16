@@ -16,5 +16,65 @@
     "falseReport": "felanmalan",
     "return": "uttag",
     "inventory": "inventering"
+  },
+  "components": {
+    "login": "Logga in",
+    "landingPage": {
+      "welcome": "Välkommen"
+    },
+    "inventory": {
+      "button": "Slutför inventering",
+      "fields": {
+        "articleNumber": "Artikelnr.",
+        "name": "Benämning",
+        "dimenstion": "Dimension",
+        "balance": "Saldo",
+        "date": "Datum",
+        "repairable": "Reparerbar",
+        "place": "Plats",
+        "unit": "Enhet",
+        "number": "Antal"
+      }
+    },
+    "return": {
+      "fields": {
+        "userName": "Användare",
+        "AONumber": "AO-nr.",
+        "objectId": "Objektid.",
+        "company": "Företag",
+        "account": "Konto",
+        "title": "Ansvar",
+        "activity": "Aktivitet",
+        "KPlace": "K-ställe",
+        "followUp": "Uppföljn"
+      },
+      "buttons": {
+        "next": "Nästa",
+        "add": "Lägg till",
+        "inventory": "Inv-OK",
+        "done": "Klar"
+      }
+    },
+    "reportFailure": {
+      "fields": {
+        "department": "Till utförande avdelning",
+        "objectId": "ObjektsId.",
+        "description": "Beskrivning",
+        "discovery": "Upptäckt",
+        "symptom": "Symptom",
+        "uploadePictures": "Ladda upp bilaga",
+        "fieldsPlaceholder": "Välj ett alternative"
+      },
+      "buttons": {
+        "selectFromGallery": "Välj från kamerarulle",
+        "takePicture": "Ta bild",
+        "submitFailureReport": "Slutför felanmälan"
+      }
+    },
+    "errors": {
+      "submissionSuccessFul": "Submission approved!",
+      "submissionErrorFailed": "Submission Failed. Probably you entered an information wrong. Please try again!",
+      "submissionFailed": "Oops! Something went wrong. Please Login and try it again!"
+    }
   }
 }
