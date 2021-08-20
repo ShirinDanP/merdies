@@ -8,13 +8,20 @@ import {
   AccordionDetails,
   CardMedia,
   Typography,
+  Button,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { Menu, Close } from "@material-ui/icons";
+import {
+  Menu,
+  Close,
+  PersonAddDisabledSharp,
+  PersonAddSharp,
+} from "@material-ui/icons";
 import { useMsal } from "@azure/msal-react";
 
 import useLocation from "../../hooks/useLocation";
 import usePageValues from "../../hooks/usePageValues";
+import useUserName from "../../hooks/useUserName";
 import useDirectNavigation from "../../hooks/useDirectNavigation";
 import LogoIcon from "../../assets/logoicon.svg";
 import MenuExpansion from "./MenuExpantion";
@@ -54,6 +61,16 @@ const useStyles = makeStyles((theme) =>
     accordionSummary: {
       height: "75px",
     },
+    button: {
+      display: "contents",
+      backgroundColor: "none",
+    },
+    titleContent: {
+      display: "flex",
+      flexDirection: "row",
+      marginLeft: "80%",
+      alignSelf: "center",
+    },
   })
 );
 
@@ -62,9 +79,12 @@ const NavBar: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const [{ pageValues }] = usePageValues();
   const location = useLocation();
-  const [{ pageContext }, { onClickNavigationButton }] = useDirectNavigation();
+
   const [menuIcon, setMenuIcon] = useState<boolean>(false);
   const { instance } = useMsal();
+  const [{ pageContext }, { onClickNavigationButton }] = useDirectNavigation();
+
+  const [{ clickedOnUser, clickOnUser }] = useUserName({});
 
   const handleMenu = (): void => {
     setMenuIcon(!menuIcon);
@@ -77,16 +97,16 @@ const NavBar: React.FC = (): JSX.Element => {
       : t(`pageValues.${locationName}`);
 
   const navigateAndCloseMenu = (value: string): void => {
-    onClickNavigationButton(value);
     setMenuIcon(false);
+    onClickNavigationButton(value);
   };
 
   return (
     <AppBar>
       <Accordion
         className={classes.container}
+        onClick={handleMenu}
         expanded={menuIcon}
-        onChange={handleMenu}
       >
         <AccordionSummary
           className={classes.accordionSummary}
@@ -98,15 +118,34 @@ const NavBar: React.FC = (): JSX.Element => {
             )
           }
         >
-          <div className={classes.logoContainer}>
+          <div
+            className={classes.logoContainer}
+            onClick={(event) => event.stopPropagation()}
+          >
             <CardMedia
               className={classes.logo}
               component="img"
               image={LogoIcon}
             />
             <Typography variant="h5">{showPageTitle}</Typography>
+            <div className={classes.titleContent}>
+              {window.location.pathname === "/return" ||
+              window.location.pathname === "/uttag" ? (
+                <Button
+                  className={classes.button}
+                  onClick={() => clickOnUser()}
+                >
+                  {clickedOnUser ? (
+                    <PersonAddSharp className={classes.menuIcon} />
+                  ) : (
+                    <PersonAddDisabledSharp className={classes.menuIcon} />
+                  )}
+                </Button>
+              ) : null}
+            </div>
           </div>
         </AccordionSummary>
+
         <AccordionDetails className={classes.accordionDetail}>
           <MenuExpansion
             showPageTitle={showPageTitle}

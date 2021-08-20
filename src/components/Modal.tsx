@@ -5,7 +5,9 @@ interface ModalProps {
   children: any;
   shown: boolean;
   close: () => void;
-  backgroundColor: string;
+  backgroundColor?: string;
+  position?: string;
+  display?: string;
 }
 
 const useStyle = makeStyles(() =>
@@ -26,6 +28,9 @@ const useStyle = makeStyles(() =>
       width: "100%",
       minHeight: "200px",
       padding: "25px",
+      display: ({ display }: any): string => display,
+      justifyContent: ({ position }: any): string => position,
+      alignItems: ({ position }: any): string => position,
       backgroundColor: ({ backgroundColor }: any): string => backgroundColor,
     },
   })
@@ -35,23 +40,25 @@ const Modal: React.FC<ModalProps> = ({
   shown,
   close,
   backgroundColor,
+  position,
+  display
 }) => {
   const props = {
-    backgroundColor: backgroundColor,
+    backgroundColor,
+    position,
+    display
   };
   const classes = useStyle(props);
   return shown ? (
     <div
       className={classes.modalBackdrop}
       onClick={() => {
-        // close modal when outside of modal is clicked
         close();
       }}
     >
       <div
         className={classes.modalContent}
         onClick={(e) => {
-          // do not close modal if anything inside modal content is clicked
           e.stopPropagation();
         }}
       >

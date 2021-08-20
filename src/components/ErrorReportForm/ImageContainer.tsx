@@ -63,7 +63,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
   return (
     <>
       <Typography>
-         {t("components.reportFailure.fields.uploadePictures")}
+         {t("components.errorReport.fields.uploadePictures")}
       </Typography>
       <div className={classes.cardContainer}>{showMultipleimages}</div>
       <input
@@ -78,7 +78,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
       <label htmlFor="Bilaga">
         <Button className={classes.takePhotoButton} component="span">
           <Photo className={classes.icon} />
-          {t("components.reportFailure.buttons.selectFromGallery")}
+          {t("components.errorReport.buttons.selectFromGallery")}
         </Button>
       </label>
       <input
@@ -94,7 +94,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
       <label htmlFor="Bilaga">
         <Button className={classes.takePhotoButton} component="span">
           <PhotoCamera className={classes.icon} />
-          {t("components.reportFailure.buttons.takePicture")}
+          {t("components.errorReport.buttons.takePicture")}
         </Button>
       </label>
     </>

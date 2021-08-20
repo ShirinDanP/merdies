@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Icon from "@mdi/react";
 import { TextField, Button, makeStyles, createStyles } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import Spinner from "../Spinner";
 
 import QRscanner from "./QRScanner";
 
@@ -62,6 +63,7 @@ const FieldWithScanner: React.FC<FieldWithScannerProps> = ({
   const handleScan = (data: any) => {
     if (data) {
       setValue(`${data}`);
+      setOpenQrScanner(false);
     }
   };
   const handleError = (err: any) => {
@@ -77,7 +79,7 @@ const FieldWithScanner: React.FC<FieldWithScannerProps> = ({
             inputValue={articleId as any}
             options={searchResult as any}
             getOptionLabel={getOptionLabel}
-            style={{ width: '90%' }}
+            style={{ width: "90%" }}
             onInputChange={onChange as any}
             open={open}
             renderInput={(params) => (
@@ -88,6 +90,15 @@ const FieldWithScanner: React.FC<FieldWithScannerProps> = ({
                 onBlur={onBlur}
                 onChange={onBlur}
                 InputLabelProps={{ shrink: true, style: { color: "black" } }}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {!searchResult ? <Spinner /> : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
               />
             )}
           />

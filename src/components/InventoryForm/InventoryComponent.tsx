@@ -1,29 +1,22 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TextField, Button, createStyles, makeStyles } from "@material-ui/core";
+import { TextField, createStyles, makeStyles } from "@material-ui/core";
+import useInventory from "../../hooks/useInventory";
+import { Articles } from "../../services/Inventory/model";
 
-import FieldWithScanner from "./FieldWithScanner";
-import useInventory from "../hooks/useInventory";
-import ErrorOrSuccessMsg from "./ErrorOrSuccessMsg";
-import { Articles } from "../services/Inventory/model";
+import FieldWithScanner from "../Scanner/FieldWithScanner";
 
-interface InventoryProps {
+interface InventoryComponentProps {
   sessionId: string;
   accessToken: string | null;
+  articleId: string;
+  quantity: string;
+  onChange: (event: any, value: string) => void;
+  onChangeQuantity: () => void;
+  setArticleId: React.Dispatch<React.SetStateAction<string>>;
 }
 const useStyles = makeStyles(() =>
   createStyles({
-    root: {
-      "& > *": {
-        marginTop: "16px",
-        "& .Mui-focused": {
-          fontWeight: "bold",
-        },
-        "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#387C6D",
-        },
-      },
-    },
     container: {
       marginTop: "100px",
     },
@@ -32,75 +25,49 @@ const useStyles = makeStyles(() =>
       flexDirection: "row",
       justifyContent: "space-around",
     },
-    button: {
-      marginTop: "32px",
-      color: "#FFFFFF",
-      width: "100%",
-      "&:hover": {
-        backgroundColor: "#4ba692",
-      },
-      "&:disabled": {
-        backgroundColor: "#6FB7A7",
-      },
-    },
+
     smallRightTextField: {
       marginLeft: "11px",
     },
   })
 );
-
-const InventoryForm: React.FC<InventoryProps> = ({
-  accessToken,
+const InventoryComponent: React.FC<InventoryComponentProps> = ({
   sessionId,
+  accessToken,
+  articleId,
+  quantity,
+  setArticleId,
+  onChange,
+  onChangeQuantity,
 }): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const [articleId, setArticleId] = useState<string>("");
-  const [quantity, setQuantityValue] = useState<string>("");
 
   const [
     {
       articleInfo,
       searchArticleResult,
-      response,
-      openModal,
-      submitInventory,
+
       getArticleInfo,
     },
   ] = useInventory({
     sessionId,
     accessToken,
     articleId,
-    quantity: Number(quantity),
+    quantity,
   });
 
-  const onChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    value: string
-  ): void => {
-    setArticleId(value);
-  };
-
-  const onChangeQuantity =
-    () =>
-    (event: React.ChangeEvent<HTMLInputElement>): void => {
-      setQuantityValue(event.target.value);
-    };
-
-  const onSubmitClick = (): void => {
-    submitInventory();
-  };
-
-  const disabledButton = !articleId || !quantity;
-
   return (
-    <div className={classes.root}>
+    <>
       <FieldWithScanner
         name="articleNumber"
         location="inventory"
-        onChange={(event: React.ChangeEvent<HTMLInputElement>, value: string) =>
-          onChange(event, value)
-        }
+        onChange={(
+          event: React.ChangeEvent<HTMLInputElement>,
+          value: string
+        ) => {
+          onChange(event, value);
+        }}
         articleId={articleId}
         setValue={(data: string) => setArticleId(data)}
         onBlur={() => getArticleInfo()}
@@ -182,19 +149,11 @@ const InventoryForm: React.FC<InventoryProps> = ({
         variant="outlined"
         InputLabelProps={{ shrink: true, style: { color: "black" } }}
         value={quantity}
-        onChange={onChangeQuantity()}
+        onChange={onChangeQuantity() as any}
         fullWidth
       />
-      <Button
-        className={classes.button}
-        onClick={() => onSubmitClick()}
-        disabled={disabledButton}
-      >
-        {t("components.inventory.button")}
-      </Button>
-      {openModal && <ErrorOrSuccessMsg response={response} />}
-    </div>
+    </>
   );
 };
 
-export default InventoryForm;
+export default InventoryComponent;

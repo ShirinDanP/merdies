@@ -47,19 +47,20 @@ const LandingPage: React.FC = (): JSX.Element => {
   useEffect(() => {
     if (account && account.name) {
       setName(account.name.split(" ")[0]);
-    console.log('shirin', account)
     }
   }, [account]);
 
   return (
     <>
-      <AuthenticatedTemplate>
-        <NavBar />
-        {name ? (
+      {account ? (
+        <>
+          <NavBar />
           <div className={classes.container}>
-            <Typography variant="h5">
-              {`${t("components.landingPage.welcome")}, ${name}`}
-            </Typography>
+            {name && (
+              <Typography variant="h5">
+                {`${t("components.landingPage.welcome")}, ${name}`}
+              </Typography>
+            )}
             {Object.keys(pageValues).map((value: string, index: number) => (
               <Button
                 key={index}
@@ -70,11 +71,10 @@ const LandingPage: React.FC = (): JSX.Element => {
               </Button>
             ))}
           </div>
-        ) : null}
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
+        </>
+      ) : (
         <Login />
-      </UnauthenticatedTemplate>
+      )}
     </>
   );
 };

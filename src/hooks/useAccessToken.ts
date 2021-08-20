@@ -22,13 +22,12 @@ const useAccessToken = (): [UseAccessTokenState] => {
 
   const accessTokenRequest = {
     scopes: CSS_CONFIG.SCOPES,
-    account: msalInstance.getAccountByUsername(accounts[0].username),
+    account: msalInstance.getAccountByUsername(""),
     forceRefresh: false,
   };
-  console.log("accounts", accounts);
 
   useEffect(() => {
-    if (!accessToken && inProgress === InteractionStatus.None) {
+    if (!accessToken || inProgress === InteractionStatus.None) {
       instance
         .acquireTokenSilent(accessTokenRequest as any)
         .then((accessTokenResponse) => {

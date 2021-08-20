@@ -9,6 +9,10 @@ import {
   Info,
   RekvisionData,
   RekvisionResponse,
+  RekvisionRowData,
+  RekvisionRowResponse,
+  RequisitionNumber,
+  RequisionRadResponse,
 } from "./model";
 
 class ReturnService {
@@ -19,10 +23,10 @@ class ReturnService {
   }
 
   public getWorkOrderNumber = async (
-    workNumber: string,
-    token: string | null
+    workNumber?: string,
+    token?: string | null
   ): Promise<HttpResponse<WorkOrderNumber>> => {
-    let WorkOrderNumber: WorkOrderNumber = {
+    let workOrderNumber: WorkOrderNumber = {
       Aonr: "",
     };
     try {
@@ -33,13 +37,13 @@ class ReturnService {
         `Arbetsorder/HamtaAonr?nr=${workNumber}`,
         authentication
       );
-      WorkOrderNumber = response.data;
-      return new HTTPResponse(WorkOrderNumber);
+      workOrderNumber = response.data;
+      return new HTTPResponse(workOrderNumber);
     } catch (err) {
       const { response } = err;
       if (!response) {
         return new HTTPResponse(
-          WorkOrderNumber,
+          workOrderNumber,
           Errors.INTERNAL_SERVER_ERROR as number
         );
       }
@@ -48,13 +52,13 @@ class ReturnService {
         Object.values(Errors).indexOf(response.status) > -1
           ? response.status
           : Errors.INTERNAL_SERVER_ERROR;
-      return new HTTPResponse(WorkOrderNumber, error);
+      return new HTTPResponse(workOrderNumber, error);
     }
   };
 
   public getReturnInfo = async (
-    token: string | null,
-    kNumber: string
+    token?: string | null,
+    kNumber?: string
   ): Promise<HTTPResponse<Info>> => {
     let info: Info = {
       Id: "",
@@ -87,7 +91,7 @@ class ReturnService {
 
   public createRekvision = async (
     rekvisionData: RekvisionData,
-    token: string | null
+    token?: string | null
   ): Promise<HttpResponse<RekvisionResponse>> => {
     let rekvisionResponse: RekvisionResponse = {
       WorkOrderId: "",
@@ -103,15 +107,22 @@ class ReturnService {
       ErrorMessage: null,
       SessionID: "",
     };
+
+    let bodyFormData = new FormData();
+
+    Object.entries(rekvisionData).forEach(([key, value]) => {
+      bodyFormData.append(key, value);
+    });
     try {
       const authentication: AxiosRequestConfig = {
         headers: { Authorization: `Bearer ${token}` },
       };
       const response = await this.http.post(
-        "Rekhuvd/SkapaRevisition",
-        rekvisionData,
+        "Rekhuvd/SkapaRekvisition",
+        bodyFormData,
         authentication
       );
+
       rekvisionResponse = response.data;
       return new HTTPResponse(rekvisionResponse);
     } catch (err) {
@@ -128,6 +139,127 @@ class ReturnService {
           ? response.status
           : Errors.INTERNAL_SERVER_ERROR;
       return new HTTPResponse(rekvisionResponse, error);
+    }
+  };
+
+  public createRekvisionRow = async (
+    rekvisionRowData?: RekvisionRowData,
+    token?: string | null
+  ): Promise<HttpResponse<RekvisionRowResponse>> => {
+    let rekvisionRowResponse: RekvisionRowResponse = {
+      Success: true,
+      ErrorMessage: null,
+      SessionID: "",
+    };
+    try {
+      const authentication: AxiosRequestConfig = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const response = await this.http.post(
+        "Rekvrad/SkapaRekvisitonsrad",
+        rekvisionRowData,
+        authentication
+      );
+      rekvisionRowResponse = response.data;
+      return new HTTPResponse(rekvisionRowResponse);
+    } catch (err) {
+      const { response } = err;
+      if (!response) {
+        return new HTTPResponse(
+          rekvisionRowResponse,
+          Errors.INTERNAL_SERVER_ERROR as number
+        );
+      }
+
+      const error =
+        Object.values(Errors).indexOf(response.status) > -1
+          ? response.status
+          : Errors.INTERNAL_SERVER_ERROR;
+      return new HTTPResponse(rekvisionRowResponse, error);
+    }
+  };
+
+  public utforUttag = async (
+    requisitionNumberData: RequisitionNumber,
+    token?: string | null
+  ): Promise<HttpResponse<RekvisionRowResponse>> => {
+    let rekvisionRowResponse: RekvisionRowResponse = {
+      Success: true,
+      ErrorMessage: null,
+      SessionID: "",
+    };
+
+    let bodyFormData = new FormData();
+
+    Object.entries(requisitionNumberData).forEach(([key, value]) => {
+      bodyFormData.append(key, value);
+    });
+
+    try {
+      const authentication: AxiosRequestConfig = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const response = await this.http.post(
+        "Rekhuvd/UtforUttag",
+        bodyFormData,
+        authentication
+      );
+      rekvisionRowResponse = response.data;
+      return new HTTPResponse(rekvisionRowResponse);
+    } catch (err) {
+      const { response } = err;
+      if (!response) {
+        return new HTTPResponse(
+          rekvisionRowResponse,
+          Errors.INTERNAL_SERVER_ERROR as number
+        );
+      }
+
+      const error =
+        Object.values(Errors).indexOf(response.status) > -1
+          ? response.status
+          : Errors.INTERNAL_SERVER_ERROR;
+      return new HTTPResponse(rekvisionRowResponse, error);
+    }
+  };
+
+  public hamtaRekvisitionsrader = async (
+    token?: string | null,
+    sessionId?: string,
+    rekvisitionsId?: string | null
+  ): Promise<HTTPResponse<RequisionRadResponse>> => {
+    let requisionRadResponse: RequisionRadResponse = {
+      RequisitionId: "",
+      RequisitionList: [],
+      Success: true,
+      ErrorMessage: null,
+      SessionID: "",
+    };
+
+    try {
+      const authentication: AxiosRequestConfig = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const response = await this.http.get(
+        `Rekhuvd/HamtaRekvisitionsrader?sessionsId=${sessionId}&rekvisitionsId=${rekvisitionsId}`,
+        authentication
+      );
+      requisionRadResponse = response.data;
+      return new HTTPResponse(requisionRadResponse);
+    } catch (err) {
+      const { response } = err;
+      if (!response) {
+        return new HTTPResponse(
+          requisionRadResponse,
+          Errors.INTERNAL_SERVER_ERROR as number
+        );
+      }
+
+      const error =
+        Object.values(Errors).indexOf(response.status) > -1
+          ? response.status
+          : Errors.INTERNAL_SERVER_ERROR;
+      return new HTTPResponse(requisionRadResponse, error);
     }
   };
 }

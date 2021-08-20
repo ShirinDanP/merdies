@@ -4,21 +4,26 @@
     "description": "Merit pwa application"
   },
   "pageValues": {
-    "falseReport": "Felanmälan",
+    "errorReport": "Felanmälan",
     "inventory": "Inventering",
     "return": "Uttag/Retur",
     "felanmalan": "Felanmälan",
     "inventering": "Inventering",
     "uttag": "Uttag/Retur",
-    "logOut": "Utloggning"
+    "logOut": "Utloggning",
+    "returnInventory": "Uttag/Retur/Inv",
+    "rekvisition": "Rekvisition"
   },
   "pageUrls": {
-    "falseReport": "felanmalan",
+    "errorReport": "felanmalan",
     "return": "uttag",
-    "inventory": "inventering"
+    "inventory": "inventering",
+    "returnInv": "returnInventory",
+    "rekvisition": "rekvisition"
   },
   "components": {
     "login": "Logga in",
+    "loading": "Autentisering pågår...",
     "landingPage": {
       "welcome": "Välkommen"
     },
@@ -55,7 +60,7 @@
         "done": "Klar"
       }
     },
-    "reportFailure": {
+    "errorReport": {
       "fields": {
         "department": "Till utförande avdelning",
         "objectId": "ObjektsId.",
@@ -71,10 +76,20 @@
         "submitFailureReport": "Slutför felanmälan"
       }
     },
+    "rekvisition": {
+      "rekvisitionNumber": "Rekvisition nr",
+      "buttons": {
+        "add": "Lägg till artikel",
+        "done": "Klar-Meny",
+        "logOut": "Klar-Logga ut"
+      },
+      "rekvisionListDescriptionForManyArticle": "artiklar visas",
+      "rekvisionListDescriptionForOneArticle": "artikel visas"
+    },
     "errors": {
       "submissionSuccessFul": "Submission approved!",
       "submissionErrorFailed": "Submission Failed. Probably you entered an information wrong. Please try again!",
-      "submissionFailed": "Oops! Something went wrong. Please Login and try it again!"
+      "submissionFailed": "Oops! Något gick fel. Logga in och försök igen!"
     }
   }
 }

@@ -4,6 +4,7 @@ import {
   Articles,
   InventoryResponse,
 } from "../services/Inventory/model";
+import { RekvisionRowResponse } from "../services/Return/model";
 import configureServices from "../services";
 import HTTPResponse from "../services/HttpResponse";
 
@@ -11,7 +12,8 @@ interface UseInventoryProps {
   accessToken: string | null;
   sessionId: string;
   articleId: string;
-  quantity: number;
+  quantity: number | string;
+  requisitionId?: string;
 }
 
 interface UseInventoryState {
@@ -21,6 +23,8 @@ interface UseInventoryState {
   openModal: boolean;
   getArticleInfo: () => void;
   submitInventory: () => void;
+  createRowRekvision: (value: boolean, itemId?: string) => void;
+  rekvisitionRowResponse?: RekvisionRowResponse;
 }
 
 const useInventory = ({
@@ -28,6 +32,7 @@ const useInventory = ({
   accessToken,
   articleId,
   quantity,
+  requisitionId,
 }: UseInventoryProps): [UseInventoryState] => {
   const [articleInfo, setArticleInfo] = useState<ArticleInfo | null>(null);
 
@@ -38,6 +43,8 @@ const useInventory = ({
   const [response, setResponse] = useState<HTTPResponse<InventoryResponse>>();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [rekvisitionRowResponse, setRekvisitionRow] =
+    useState<RekvisionRowResponse>();
 
   const getArticle = async (): Promise<void> => {
     const services = await configureServices();
@@ -56,6 +63,7 @@ const useInventory = ({
       accessToken,
       articleId
     )) as any;
+    setOpenModal(true);
     setArticleInfo(result);
   };
 
@@ -75,6 +83,28 @@ const useInventory = ({
     setOpenModal(true);
   };
 
+  const createRowRekvision = async (
+    value: boolean,
+    itemId?: string
+  ): Promise<void> => {
+    const services = await configureServices();
+    const requestNumber = localStorage.getItem("requisitionNr");
+
+    const rekvisionRowData = {
+      SessionId: sessionId,
+      ItemId: articleId || itemId,
+      Quantity: quantity,
+      Inventory: value,
+      RequisitionId: requestNumber,
+    };
+    const response = (await services.returnService.createRekvisionRow(
+      rekvisionRowData as any,
+      accessToken
+    )) as any;
+    setOpenModal(true);
+    setRekvisitionRow(response.result);
+  };
+
   useEffect((): void => {
     getArticle();
   }, [articleId]);
@@ -85,8 +115,10 @@ const useInventory = ({
       searchArticleResult,
       response,
       openModal,
+      rekvisitionRowResponse,
       getArticleInfo,
       submitInventory,
+      createRowRekvision,
     },
   ];
 };

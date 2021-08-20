@@ -1,7 +1,7 @@
 import React from "react";
 import QrScan from "react-qr-reader";
 
-import Modal from "./Modal";
+import Modal from "../Modal";
 
 interface QRScannerProps {
   handleError: (data: any) => void;

@@ -19,7 +19,6 @@ body,
       /* Calculation of padding is based on 13 columns and column gap
        * where the first column is reserved for sticky header and share icons
        */
-      padding-left: calc(100% / ${COLUMNS} + 1.25rem / ${COLUMNS});
     }
   }
 }

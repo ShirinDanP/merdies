@@ -1,15 +1,17 @@
 import HttpClient from "./HttpClient";
 import LogInService from "./Login";
 import InventoryService from "./Inventory";
-import FalseReporService from "./FalseReport";
+import ErrorReportService from "./ErrorReport";
 import ReturnService from "./Return";
+import UserNameService from "./UserName";
 /* globals CSS_CONFIG */
 
 interface Services {
   inventory: InventoryService;
   logIn: LogInService;
-  falseReport: FalseReporService;
+  errorReport: ErrorReportService;
   returnService: ReturnService;
+  userNameService: UserNameService;
 }
 
 const configInventoryService = (): InventoryService => {
@@ -23,26 +25,34 @@ const configLoginService = (): LogInService => {
   return new LogInService(http);
 };
 
-const configureFalseReportService = (): FalseReporService => {
+const configureErrorReportService = (): ErrorReportService => {
   const http = new HttpClient(CSS_CONFIG.API);
-  return new FalseReporService(http);
+  return new ErrorReportService(http);
 };
 
 const configureReturnService = (): ReturnService => {
   const http = new HttpClient(CSS_CONFIG.API);
   return new ReturnService(http);
 };
+
+const configureUserNameService = (): UserNameService => {
+  const http = new HttpClient(CSS_CONFIG.API);
+  return new UserNameService(http);
+};
+
 const configureServices = async (): Promise<Services> => {
   const inventory = configInventoryService();
   const logIn = configLoginService();
-  const falseReport = configureFalseReportService();
+  const errorReport = configureErrorReportService();
   const returnService = configureReturnService();
+  const userNameService = configureUserNameService();
 
   return {
     inventory,
     logIn,
-    falseReport,
+    errorReport,
     returnService,
+    userNameService,
   };
 };
 

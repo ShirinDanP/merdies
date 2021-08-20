@@ -5,18 +5,23 @@
   },
   "meritTitle": "Merit",
   "pageValues": {
-    "falseReport": "False Report",
+    "errorReport": "Error Report",
     "inventory": "Inventory",
     "return": "return",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "returnInventory": "Uttag/Retur/Inv",
+    "rekvisition": "Rekvisition"
   },
   "pageUrls": {
-    "falseReport": "falseReport",
+    "errorReport": "errorReport",
     "return": "return",
-    "inventory": "inventory"
+    "inventory": "inventory",
+    "returnInv": "returnInventory",
+    "rekvisition": "rekvisition"
   },
   "components": {
     "login": "Sign in",
+    "loading": "Authentication in progress...",
     "landingPage": {
       "welcome": "Welcome"
     },
@@ -53,7 +58,7 @@
         "done": "Done"
       }
     },
-    "reportFailure": {
+    "errorReport": {
       "fields": {
         "department": "Department",
         "objectId": "ObjectId",
@@ -68,6 +73,16 @@
         "takePicture": "Take a picture",
         "submitFailureReport": "Submit failure"
       }
+    },
+    "rekvisition": {
+      "rekvisitionNumber": "Requisition number",
+      "buttons": {
+        "add": "Add article",
+        "done": "Done",
+        "logOut": "LogOut"
+      },
+      "rekvisionListDescriptionForManyArticle": "articles are shown",
+      "rekvisionListDescriptionForOneArticle": "article is shown"
     },
     "errors": {
       "submissionSuccessFul": "Submission approved!",

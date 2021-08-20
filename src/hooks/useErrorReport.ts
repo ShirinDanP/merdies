@@ -1,35 +1,35 @@
 import { useEffect, useState } from "react";
 import configureServices from "../services";
 import {
-  FalseDataWithoutSessionId,
-  FalseReportResponse,
+  ErrorDataWithoutSessionId,
+  ErrorReportResponse,
   ObjectIdData,
-} from "../services/FalseReport/model";
+} from "../services/ErrorReport/model";
 import HTTPResponse from "../services/HttpResponse";
 
-interface UseFalseReportProps {
+interface UseErrorReportProps {
   accessToken: string | null;
   objectId: string;
-  falseReportData: FalseDataWithoutSessionId;
+  errorReportData: ErrorDataWithoutSessionId;
   sessionId: string;
 }
 
-interface UseFalseReportState {
+interface UseErrorReportState {
   objectIdInfoResult: ObjectIdData[];
   departmentList: string[];
   discoveredList: string[];
   symptomList: string[];
   openModal: boolean;
-  response: HTTPResponse<FalseReportResponse> | undefined;
-  submitFalseRepost: () => void;
+  response: HTTPResponse<ErrorReportResponse> | undefined;
+  submitErrorReport: () => void;
 }
 
-const useFalseReport = ({
+const useErrorReport = ({
   accessToken,
   objectId,
-  falseReportData,
+  errorReportData,
   sessionId,
-}: UseFalseReportProps): [UseFalseReportState] => {
+}: UseErrorReportProps): [UseErrorReportState] => {
   const [objectIdInfoResult, setObjectIdInfoResult] = useState<ObjectIdData[]>([
     { ObjektId: "", Benamning1: "" },
   ]);
@@ -37,11 +37,11 @@ const useFalseReport = ({
   const [discoveredList, setDiscoveredList] = useState<string[]>([]);
   const [symptomList, setSymptomList] = useState<string[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [response, setResponse] = useState<HTTPResponse<FalseReportResponse>>();
+  const [response, setResponse] = useState<HTTPResponse<ErrorReportResponse>>();
 
   const getObjectId = async (): Promise<void> => {
     const services = await configureServices();
-    const { result } = (await services.falseReport.getObjectId(
+    const { result } = (await services.errorReport.getObjectId(
       objectId,
       accessToken
     )) as any;
@@ -50,7 +50,7 @@ const useFalseReport = ({
 
   const getDepartmentInfo = async (): Promise<void> => {
     const services = await configureServices();
-    const { result } = (await services.falseReport.getFalseReportInfo(
+    const { result } = (await services.errorReport.getErrorReportInfo(
       accessToken,
       "0014"
     )) as any;
@@ -59,7 +59,7 @@ const useFalseReport = ({
 
   const getDiscoveredInfo = async (): Promise<void> => {
     const services = await configureServices();
-    const { result } = (await services.falseReport.getFalseReportInfo(
+    const { result } = (await services.errorReport.getErrorReportInfo(
       accessToken,
       "uka"
     )) as any;
@@ -69,17 +69,17 @@ const useFalseReport = ({
   const getSymptomInfo = async (): Promise<void> => {
     const services = await configureServices();
 
-    const { result } = (await services.falseReport.getFalseReportInfo(
+    const { result } = (await services.errorReport.getErrorReportInfo(
       accessToken,
       "ukb"
     )) as any;
     setSymptomList(result);
   };
 
-  const submitFalseRepost = async (): Promise<void> => {
+  const submitErrorReport = async (): Promise<void> => {
     const services = await configureServices();
-    const { result } = (await services.falseReport.SubmitFalseReport(
-      { SessionsId: sessionId, ...falseReportData },
+    const { result } = (await services.errorReport.SubmitErrorReport(
+      { SessionsId: sessionId, ...errorReportData },
       accessToken
     )) as any;
     setResponse(result);
@@ -101,9 +101,9 @@ const useFalseReport = ({
       symptomList,
       response,
       openModal,
-      submitFalseRepost,
+      submitErrorReport,
     },
   ];
 };
 
-export default useFalseReport;
+export default useErrorReport;

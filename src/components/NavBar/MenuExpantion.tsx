@@ -63,6 +63,7 @@ const MenuExpansion: React.FC<MenuExpansionProps> = ({
                 />
               </ListItem>
             ))}
+            
             <Divider className={classes.divider} />
           </>
         )}

@@ -89,7 +89,6 @@ class InventoryService {
           Errors.INTERNAL_SERVER_ERROR as number
         );
       }
-      console.log("error", err);
 
       const error =
         Object.values(Errors).indexOf(response.status) > -1
@@ -115,7 +114,7 @@ class InventoryService {
         headers: { Authorization: `Bearer ${token}` },
       };
       const response = await this.http.post(
-        "Artikel/UforInventering",
+        "Artikel/UtforInventering",
         inventoryData,
         authentication
       );

@@ -1,14 +1,24 @@
 import { useState, useEffect } from "react";
-import configureServices from "../services";
+import { navigate } from "@reach/router";
+import { useTranslation } from "react-i18next";
+import { useMsal } from "@azure/msal-react";
 
-import { RekvisionData, WorkOrderNumber } from "../services/Return/model";
-import { ObjectIdData } from "../services/FalseReport/model";
+import configureServices from "../services";
+import {
+  RekvisionData,
+  WorkOrderNumber,
+  RequisionRadResponse,
+  RekvisionRowResponse,
+} from "../services/Return/model";
+import { ObjectIdData } from "../services/ErrorReport/model";
+import HTTPResponse from "../services/HttpResponse";
 
 interface UseReturnProps {
-  accessToken: string | null;
-  workNumber: string;
-  objectId: string;
-  rekvisionData: RekvisionData;
+  accessToken?: string | null;
+  workNumber?: string;
+  objectId?: string;
+  rekvisionData?: RekvisionData;
+  sessionId?: string;
 }
 interface UseReturnStates {
   objectIdInfoResult: ObjectIdData[];
@@ -18,7 +28,14 @@ interface UseReturnStates {
   kStalle: string[];
   uppFoljn: string[];
   workOrderNumber: WorkOrderNumber[];
+  openModal: boolean;
+  response: HTTPResponse<RekvisionData> | undefined;
   createRekvision: () => void;
+  utforUttag: (value: boolean) => void;
+  hamtaRekvisitionsRader: () => void;
+  requsitionNumber: string;
+  getRekvisionRadResponse?: RequisionRadResponse;
+  getUtforUttagResponse?: RekvisionRowResponse;
 }
 
 const useReturn = ({
@@ -26,7 +43,11 @@ const useReturn = ({
   workNumber,
   accessToken,
   objectId,
+  sessionId,
 }: UseReturnProps): [UseReturnStates] => {
+  const { t } = useTranslation();
+  const { instance } = useMsal();
+
   const [workOrderNumber, setWorkNumber] = useState<WorkOrderNumber[]>([
     {
       Aonr: "",
@@ -41,11 +62,18 @@ const useReturn = ({
   const [activityInfo, setActivityInfo] = useState<string[]>([]);
   const [kStalle, setKstalle] = useState<string[]>([]);
   const [uppFoljn, setUppFoljn] = useState<string[]>([]);
+  const [requsitionNumber, setRequisitionNumber] = useState<string>("");
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [response, setResponse] = useState<HTTPResponse<RekvisionData>>();
+  const [getRekvisionRadResponse, setRekvisitionRadResponse] =
+    useState<RequisionRadResponse>();
+  const [getUtforUttagResponse, setUtforUttagResponse] =
+    useState<RekvisionRowResponse>();
 
   const getObjectId = async (): Promise<void> => {
     const services = await configureServices();
-    const { result } = (await services.falseReport.getObjectId(
-      objectId,
+    const { result } = (await services.errorReport.getObjectId(
+      objectId as any,
       accessToken
     )) as any;
     setObjectIdInfoResult(result);
@@ -57,9 +85,9 @@ const useReturn = ({
       workNumber,
       accessToken
     )) as any;
-    console.log("result", result);
     setWorkNumber(result);
   };
+
   const getKontoInfo = async (): Promise<void> => {
     const services = await configureServices();
     const { result } = (await services.returnService.getReturnInfo(
@@ -107,10 +135,58 @@ const useReturn = ({
 
   const createRekvision = async (): Promise<void> => {
     const services = await configureServices();
-    (await services.returnService.createRekvision(
-      rekvisionData,
+    const newData = { ...rekvisionData, sessionsId: sessionId };
+    const response = (await services.returnService.createRekvision(
+      newData as any,
       accessToken
     )) as any;
+    setRequisitionNumber(response.result.RequisitionId);
+    setOpenModal(true);
+    setResponse(response.result);
+    localStorage.setItem("requisitionNr", response.result.RequisitionId);
+    if (response.result.Success) {
+      navigate(`/${t("pageUrls.returnInv")}`);
+    }
+  };
+
+  const utforUttag = async (loggedOut: boolean): Promise<void> => {
+    const services = await configureServices();
+    const requestNumber = localStorage.getItem("requisitionNr");
+    let requisitionData = {
+      sessionsId: sessionId,
+      reqnr: requestNumber,
+    };
+    const result = (await services.returnService.utforUttag(
+      requisitionData as any,
+      accessToken
+    )) as any;
+    setOpenModal(true);
+    if (!loggedOut && result.result.Success) {
+      navigate("/");
+    } else if (loggedOut && result.result.Success) {
+      instance.logoutRedirect();
+    }
+    setUtforUttagResponse(result.result);
+  };
+
+  const hamtaRekvisitionsRader = async (): Promise<void> => {
+    const services = await configureServices();
+    const requestNumber = localStorage.getItem("requisitionNr");
+
+    const response = (await services.returnService.hamtaRekvisitionsrader(
+      accessToken,
+      sessionId,
+      requestNumber
+    )) as any;
+    setOpenModal(true);
+    setRekvisitionRadResponse(response.result);
+    if (response.result.Success) {
+      navigate(`/${t("pageUrls.rekvisition")}`);
+    }
+    localStorage.setItem(
+      "RequisitionList",
+      JSON.stringify(response?.result?.RequisitionList)
+    );
   };
 
   useEffect((): void => {
@@ -135,7 +211,14 @@ const useReturn = ({
       kStalle,
       uppFoljn,
       objectIdInfoResult,
+      requsitionNumber,
+      openModal,
+      response,
+      getRekvisionRadResponse,
+      getUtforUttagResponse,
       createRekvision,
+      utforUttag,
+      hamtaRekvisitionsRader,
     },
   ];
 };

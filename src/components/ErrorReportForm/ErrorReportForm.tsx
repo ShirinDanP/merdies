@@ -2,16 +2,19 @@ import React, { useState, ChangeEvent } from "react";
 import { TextField, Button, createStyles, makeStyles } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useTranslation } from "react-i18next";
-import FieldWithScanner from "../FieldWithScanner";
-import useFalseReport from "../../hooks/useFalseReport";
-import ErrorOrSuccessMsg from "../ErrorOrSuccessMsg";
+import FieldWithScanner from "../Scanner/FieldWithScanner";
+import useErrorReport from "../../hooks/useErrorReport";
+import useShowModalMessage from "../../hooks/useShowModalMessage";
+import ErrorOrSuccessMsg from "../Error/ErrorOrSuccessMsg";
 import ImageContainer from "./ImageContainer";
+import Modal from "../Modal";
+import Spinner from "../Spinner";
 
 import {
-  FalseDataWithoutSessionId,
-  FalseReportInfo,
+  ErrorDataWithoutSessionId,
+  ErrorReportInfo,
   ObjectIdData,
-} from "../../services/FalseReport/model";
+} from "../../services/ErrorReport/model";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,12 +45,12 @@ const useStyles = makeStyles(() =>
   })
 );
 
-interface ReportFailurProps {
+interface ErrorReportProps {
   accessToken: string | null;
   sessionId: string;
 }
 
-const ReportFailureForm: React.FC<ReportFailurProps> = ({
+const ErrorReportForm: React.FC<ErrorReportProps> = ({
   accessToken,
   sessionId,
 }): JSX.Element => {
@@ -66,8 +69,8 @@ const ReportFailureForm: React.FC<ReportFailurProps> = ({
     Bilaga: "",
   };
 
-  const [falseReportData, setFalseReportData] =
-    useState<FalseDataWithoutSessionId>(dataInitialValue);
+  const [errorReportData, setErrorReportData] =
+    useState<ErrorDataWithoutSessionId>(dataInitialValue);
 
   const [
     {
@@ -77,20 +80,23 @@ const ReportFailureForm: React.FC<ReportFailurProps> = ({
       symptomList,
       openModal,
       response,
-      submitFalseRepost,
+      submitErrorReport,
     },
-  ] = useFalseReport({
+  ] = useErrorReport({
     accessToken,
     objectId,
-    falseReportData,
+    errorReportData,
     sessionId,
+  });
+  const [{ isLoading, setIsLoading }] = useShowModalMessage({
+    response,
   });
 
   const handleInputChange =
     (field: string) =>
     (event: React.FormEvent<HTMLInputElement> | any, value: string) => {
       const newValue = value?.slice(0, value.indexOf(" "));
-      setFalseReportData((prevState) => ({
+      setErrorReportData((prevState: any) => ({
         ...prevState,
         [field]: newValue || event?.target?.value,
       }));
@@ -101,13 +107,15 @@ const ReportFailureForm: React.FC<ReportFailurProps> = ({
     value: string
   ): void => {
     setObjectId(value);
-    setFalseReportData((prevState) => ({ ...prevState, ObjektId: value }));
+    setErrorReportData((prevState: any) => ({ ...prevState, ObjektId: value }));
   };
 
   const handleChangeImage = (event: any) => {
-    const Images = [...images, URL.createObjectURL(event.target.files[0])];
-    setImage(Images);
-    setFalseReportData((prevState) => ({
+    const files = [...event.target.files];
+    const uploadedImage = files.map((item: any) => URL.createObjectURL(item));
+    const Images = [...images, uploadedImage];
+    setImage(Images.flat());
+    setErrorReportData((prevState: any) => ({
       ...prevState,
       Bilaga: Images,
     }));
@@ -116,27 +124,31 @@ const ReportFailureForm: React.FC<ReportFailurProps> = ({
   const onDeleteImage = (index: any) => {
     const Images = images.filter((image: any, i: any) => i !== index);
     setImage(Images);
-    setFalseReportData((prevState) => ({
+    setErrorReportData((prevState: any) => ({
       ...prevState,
       Bilaga: Images,
     }));
   };
 
+  const onSubmitClick = () => {
+    setIsLoading(true);
+    submitErrorReport();
+  };
   return (
     <form className={classes.root}>
       <Autocomplete
         id="TillUtfAvd"
         options={departmentList as any}
-        getOptionLabel={(options: FalseReportInfo) =>
+        getOptionLabel={(options: ErrorReportInfo) =>
           `${options.Id} ${options.Description}`
         }
         onInputChange={handleInputChange("TillUtfAvd") as any}
         renderInput={(params: any) => (
           <TextField
             {...params}
-            label={t("components.reportFailure.fields.department")}
+            label={t("components.errorReport.fields.department")}
             variant="outlined"
-            placeholder={t("components.reportFailure.fields.fieldsPlaceholder")}
+            placeholder={t("components.errorReport.fields.fieldsPlaceholder")}
             fullwidth
             InputLabelProps={{ shrink: true, style: { color: "black" } }}
           />
@@ -144,7 +156,7 @@ const ReportFailureForm: React.FC<ReportFailurProps> = ({
       />
       <FieldWithScanner
         name="objectId"
-        location="reportFailure"
+        location="errorReport"
         articleId={objectId}
         onChange={(event: React.ChangeEvent<HTMLInputElement>, value: string) =>
           onObjectIdChange(event, value)
@@ -158,12 +170,12 @@ const ReportFailureForm: React.FC<ReportFailurProps> = ({
       <TextField
         id="Beskrivning"
         onChange={handleInputChange("Beskrivning") as any}
-        label={t("components.reportFailure.fields.description")}
+        label={t("components.errorReport.fields.description")}
         variant="outlined"
         fullWidth
         multiline
         rows={3}
-        value={falseReportData?.Beskrivning}
+        value={errorReportData?.Beskrivning}
         InputLabelProps={{
           shrink: true,
           style: {
@@ -174,17 +186,17 @@ const ReportFailureForm: React.FC<ReportFailurProps> = ({
       <Autocomplete
         id="Upptackt"
         options={discoveredList as any}
-        getOptionLabel={(options: FalseReportInfo) =>
+        getOptionLabel={(options: ErrorReportInfo) =>
           `${options.Id} ${options.Description}`
         }
         onInputChange={handleInputChange("Upptackt") as any}
         renderInput={(params: any) => (
           <TextField
             {...params}
-            label={t("components.reportFailure.fields.discovery")}
+            label={t("components.errorReport.fields.discovery")}
             variant="outlined"
             fullWidth
-            placeholder={t("components.reportFailure.fields.fieldsPlaceholder")}
+            placeholder={t("components.errorReport.fields.fieldsPlaceholder")}
             InputLabelProps={{ shrink: true, style: { color: "black" } }}
           />
         )}
@@ -192,16 +204,16 @@ const ReportFailureForm: React.FC<ReportFailurProps> = ({
       <Autocomplete
         id="Symtom"
         options={symptomList as any}
-        getOptionLabel={(options: FalseReportInfo) =>
+        getOptionLabel={(options: ErrorReportInfo) =>
           `${options.Id} ${options.Description}`
         }
         onInputChange={handleInputChange("Symtom") as any}
         renderInput={(params: any) => (
           <TextField
             {...params}
-            label={t("components.reportFailure.fields.symptom")}
+            label={t("components.errorReport.fields.symptom")}
             variant="outlined"
-            placeholder={t("components.reportFailure.fields.fieldsPlaceholder")}
+            placeholder={t("components.errorReport.fields.fieldsPlaceholder")}
             fullWidth
             InputLabelProps={{ shrink: true, style: { color: "black" } }}
           />
@@ -212,12 +224,20 @@ const ReportFailureForm: React.FC<ReportFailurProps> = ({
         handleChangeImage={handleChangeImage}
         onDeleteImage={onDeleteImage}
       />
-      <Button className={classes.button} onClick={submitFalseRepost}>
-        {t("components.reportFailure.buttons.submitFailureReport")}
+      <Button className={classes.button} onClick={onSubmitClick}>
+        {t("components.errorReport.buttons.submitFailureReport")}
       </Button>
+      <Modal
+        close={() => console.log()}
+        shown={isLoading}
+        position="center"
+        display="flex"
+      >
+        <Spinner />
+      </Modal>
       {openModal && <ErrorOrSuccessMsg response={response} />}
     </form>
   );
 };
 
-export default ReportFailureForm;
+export default ErrorReportForm;

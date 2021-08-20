@@ -3,11 +3,11 @@ export interface ObjectIdData {
   Benamning1: string;
 }
 
-export interface FalseReportInfo {
+export interface ErrorReportInfo {
   Id: string;
   Description: string;
 }
-export interface FalseDataWithoutSessionId {
+export interface ErrorDataWithoutSessionId {
   TillUtfAvd: string;
   ObjektId: string;
   Beskrivning: string;
@@ -16,11 +16,11 @@ export interface FalseDataWithoutSessionId {
   Bilaga: any;
 }
 
-export interface FalseReportData extends FalseDataWithoutSessionId {
+export interface ErrorReportData extends ErrorDataWithoutSessionId {
   SessionsId: string;
 }
 
-export interface FalseReportResponse {
+export interface ErrorReportResponse {
   WorkOrderId: string;
   Success: boolean;
   ErrorMessage: string | null;

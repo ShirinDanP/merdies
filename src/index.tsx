@@ -27,9 +27,19 @@ msalInstance.addEventCallback((event: EventMessage) => {
     const account = payload.account;
     msalInstance.setActiveAccount(account);
     token = payload.accessToken;
-    console.log("payload", payload.account);
   }
 });
+msalInstance
+  .handleRedirectPromise()
+  .then((authResult) => {
+    const account = msalInstance.getActiveAccount();
+    if (!account) {
+      msalInstance.loginRedirect();
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 ReactDOM.render(
   <React.StrictMode>

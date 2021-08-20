@@ -3,13 +3,13 @@ import HTTPResponse from "../HttpResponse";
 import { AxiosRequestConfig } from "axios";
 import HttpClient from "../HttpClient";
 import {
-  FalseReportInfo,
-  FalseReportData,
-  FalseReportResponse,
+  ErrorReportInfo,
+  ErrorReportData,
+  ErrorReportResponse,
   ObjectIdData,
 } from "./model";
 
-class FaleReportService {
+class ErrorReportService {
   private http: HttpClient;
 
   public constructor(http: HttpClient) {
@@ -18,7 +18,7 @@ class FaleReportService {
 
   public getObjectId = async (
     objectid: string,
-    token: string | null
+    token?: string | null
   ): Promise<HTTPResponse<ObjectIdData>> => {
     let objectIdInfo: ObjectIdData = {
       ObjektId: "",
@@ -51,11 +51,11 @@ class FaleReportService {
     }
   };
 
-  public getFalseReportInfo = async (
+  public getErrorReportInfo = async (
     token: string | null,
     kNumber: string
-  ): Promise<HTTPResponse<FalseReportInfo>> => {
-    let falseReportInfoInfo: FalseReportInfo = {
+  ): Promise<HTTPResponse<ErrorReportInfo>> => {
+    let errorReportInfoInfo: ErrorReportInfo = {
       Id: "",
       Description: "",
     };
@@ -68,13 +68,13 @@ class FaleReportService {
         `Tabelldata/Tabelldata?tabnr=${kNumber}`,
         authentication
       );
-      falseReportInfoInfo = response.data;
-      return new HTTPResponse(falseReportInfoInfo);
+      errorReportInfoInfo = response.data;
+      return new HTTPResponse(errorReportInfoInfo);
     } catch (err) {
       const { response } = err;
       if (!response) {
         return new HTTPResponse(
-          falseReportInfoInfo,
+          errorReportInfoInfo,
           Errors.INTERNAL_SERVER_ERROR as number
         );
       }
@@ -83,15 +83,15 @@ class FaleReportService {
         Object.values(Errors).indexOf(response.status) > -1
           ? response.status
           : Errors.INTERNAL_SERVER_ERROR;
-      return new HTTPResponse(falseReportInfoInfo, error);
+      return new HTTPResponse(errorReportInfoInfo, error);
     }
   };
 
-  public SubmitFalseReport = async (
-    falseReportData: FalseReportData,
+  public SubmitErrorReport = async (
+    errorReportData: ErrorReportData,
     token: string | null
-  ): Promise<HTTPResponse<FalseReportResponse>> => {
-    let falseReportResponse: FalseReportResponse = {
+  ): Promise<HTTPResponse<ErrorReportResponse>> => {
+    let errorReportResponse: ErrorReportResponse = {
       WorkOrderId: "",
       Success: false,
       ErrorMessage: "",
@@ -99,8 +99,8 @@ class FaleReportService {
     };
     let bodyFormData = new FormData();
 
-    Object.entries(falseReportData).forEach(([key, value]) => {
-        bodyFormData.append(key, value)
+    Object.entries(errorReportData).forEach(([key, value]) => {
+      bodyFormData.append(key, value);
     });
 
     try {
@@ -112,13 +112,13 @@ class FaleReportService {
         bodyFormData,
         authentication
       );
-      falseReportResponse = response.data;
-      return new HTTPResponse(falseReportResponse);
+      errorReportResponse = response.data;
+      return new HTTPResponse(errorReportResponse);
     } catch (err) {
       const { response } = err;
       if (!response) {
         return new HTTPResponse(
-          falseReportResponse,
+          errorReportResponse,
           Errors.INTERNAL_SERVER_ERROR as number
         );
       }
@@ -128,9 +128,9 @@ class FaleReportService {
           ? response.status
           : Errors.INTERNAL_SERVER_ERROR;
 
-      return new HTTPResponse(falseReportResponse, error);
+      return new HTTPResponse(errorReportResponse, error);
     }
   };
 }
 
-export default FaleReportService;
+export default ErrorReportService;

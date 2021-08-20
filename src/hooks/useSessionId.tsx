@@ -15,7 +15,6 @@ const useSessionId = (accessToken: string): [UseLogInState] => {
     const services = await configureServices();
     const { result } = (await services.logIn.getLogInInfo(accessToken)) as any;
     setSessionId(result.SessionID);
-    console.log();
   };
 
   useEffect((): void => {

@@ -19,7 +19,7 @@ export interface ArticleInfo {
 export interface InventoryData {
   SessionId: string;
   ItemId: string;
-  Quantity: number;
+  Quantity: number | string;
 }
 
 export interface InventoryResponse {
@@ -27,4 +27,3 @@ export interface InventoryResponse {
   ErrorMessage: string | null;
   SessionID: string;
 }
-
