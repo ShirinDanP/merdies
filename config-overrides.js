@@ -84,8 +84,8 @@ module.exports = {
           VERSION: JSON.stringify(appPackageJson.version),
         }
       ),
-    };
 
+    };
 
     return config;
   },
@@ -95,7 +95,8 @@ module.exports = {
       return paths;
     }
 
-    paths.publicUrlOrPath = `/`;
+    paths.publicUrlOrPath = "/";
+
 
     // changing output path to dist
     paths.appBuild = paths.appBuild.replace('/build', '/dist');

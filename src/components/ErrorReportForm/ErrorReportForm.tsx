@@ -59,6 +59,7 @@ const ErrorReportForm: React.FC<ErrorReportProps> = ({
 
   const [objectId, setObjectId] = useState<string>("");
   const [images, setImage] = useState<any>([]);
+  const [imageFiles, setImageFiles] = useState<any>([]);
 
   const dataInitialValue = {
     TillUtfAvd: "",
@@ -115,18 +116,22 @@ const ErrorReportForm: React.FC<ErrorReportProps> = ({
     const uploadedImage = files.map((item: any) => URL.createObjectURL(item));
     const Images = [...images, uploadedImage];
     setImage(Images.flat());
+    const ImageInFileFormat = [...imageFiles, files].flat();
+    setImageFiles(ImageInFileFormat.flat());
     setErrorReportData((prevState: any) => ({
       ...prevState,
-      Bilaga: Images,
+      Bilaga: ImageInFileFormat,
     }));
   };
 
   const onDeleteImage = (index: any) => {
     const Images = images.filter((image: any, i: any) => i !== index);
     setImage(Images);
+    const ImageFiles = imageFiles.filter((image: any, i: any) => i !== index);
+    setImageFiles(ImageFiles);
     setErrorReportData((prevState: any) => ({
       ...prevState,
-      Bilaga: Images,
+      Bilaga: ImageFiles,
     }));
   };
 

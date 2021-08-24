@@ -32,7 +32,6 @@ const useInventory = ({
   accessToken,
   articleId,
   quantity,
-  requisitionId,
 }: UseInventoryProps): [UseInventoryState] => {
   const [articleInfo, setArticleInfo] = useState<ArticleInfo | null>(null);
 

@@ -21,10 +21,11 @@ import { useMsal } from "@azure/msal-react";
 
 import useLocation from "../../hooks/useLocation";
 import usePageValues from "../../hooks/usePageValues";
-import useUserName from "../../hooks/useUserName";
 import useDirectNavigation from "../../hooks/useDirectNavigation";
+import useUserName from "../../hooks/useUserName";
 import LogoIcon from "../../assets/logoicon.svg";
 import MenuExpansion from "./MenuExpantion";
+import { useAuthContext } from "../../contexts/authContext";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -73,18 +74,18 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-
+interface NavBarProps {
+  clickOnUser?: () => void;
+  clickedOnUser?: boolean;
+}
 const NavBar: React.FC = (): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [{ pageValues }] = usePageValues();
   const location = useLocation();
-
   const [menuIcon, setMenuIcon] = useState<boolean>(false);
   const { instance } = useMsal();
   const [{ pageContext }, { onClickNavigationButton }] = useDirectNavigation();
-
-  const [{ clickedOnUser, clickOnUser }] = useUserName({});
 
   const handleMenu = (): void => {
     setMenuIcon(!menuIcon);
@@ -95,12 +96,14 @@ const NavBar: React.FC = (): JSX.Element => {
     locationName === "/" || !locationName
       ? t("meritTitle")
       : t(`pageValues.${locationName}`);
-
+  const { accessToken, sessionId } = useAuthContext();
+  const [{ clickedOnUser, clickOnUser }] = useUserName({
+    accessToken,
+  });
   const navigateAndCloseMenu = (value: string): void => {
     setMenuIcon(false);
     onClickNavigationButton(value);
   };
-
   return (
     <AppBar>
       <Accordion
@@ -129,12 +132,9 @@ const NavBar: React.FC = (): JSX.Element => {
             />
             <Typography variant="h5">{showPageTitle}</Typography>
             <div className={classes.titleContent}>
-              {window.location.pathname === "/return" ||
-              window.location.pathname === "/uttag" ? (
-                <Button
-                  className={classes.button}
-                  onClick={() => clickOnUser()}
-                >
+              {window.location.pathname === "/MeritWeb/return" ||
+              window.location.pathname === "/MeritWeb/uttag" ? (
+                <Button className={classes.button} onClick={clickOnUser}>
                   {clickedOnUser ? (
                     <PersonAddSharp className={classes.menuIcon} />
                   ) : (

@@ -41,6 +41,8 @@ msalInstance
     console.log(err);
   });
 
+
+
 ReactDOM.render(
   <React.StrictMode>
     <App pca={msalInstance} account={accounts} />

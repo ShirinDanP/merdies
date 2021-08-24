@@ -145,7 +145,7 @@ const useReturn = ({
     setResponse(response.result);
     localStorage.setItem("requisitionNr", response.result.RequisitionId);
     if (response.result.Success) {
-      navigate(`/${t("pageUrls.returnInv")}`);
+      navigate(`${t("pageUrls.returnInv")}`);
     }
   };
 
@@ -162,7 +162,7 @@ const useReturn = ({
     )) as any;
     setOpenModal(true);
     if (!loggedOut && result.result.Success) {
-      navigate("/");
+      navigate("/MeritWeb");
     } else if (loggedOut && result.result.Success) {
       instance.logoutRedirect();
     }
@@ -181,7 +181,7 @@ const useReturn = ({
     setOpenModal(true);
     setRekvisitionRadResponse(response.result);
     if (response.result.Success) {
-      navigate(`/${t("pageUrls.rekvisition")}`);
+      navigate(`${t("pageUrls.rekvisition")}`);
     }
     localStorage.setItem(
       "RequisitionList",

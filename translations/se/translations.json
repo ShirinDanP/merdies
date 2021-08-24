@@ -4,22 +4,34 @@
     "description": "Merit pwa application"
   },
   "pageValues": {
+    "MeritWeb": "Merit",
     "errorReport": "Felanmälan",
     "inventory": "Inventering",
-    "return": "Uttag/Retur",
-    "felanmalan": "Felanmälan",
-    "inventering": "Inventering",
-    "uttag": "Uttag/Retur",
+    "return": "Uttag/retur",
     "logOut": "Utloggning",
     "returnInventory": "Uttag/Retur/Inv",
-    "rekvisition": "Rekvisition"
+    "rekvisition": "Rekvisition",
+    "felanmalan": "Felanmälan",
+    "inventering": "Inventering",
+    "uttag": "Uttag/retur",
+    "MeritWeb/errorReport": "Felanmälan",
+    "MeritWeb/inventory": "Inventering",
+    "MeritWeb/return": "Uttag/retur",
+    "MeritWeb/logOut": "Utloggning",
+    "MeritWeb/returnInventory": "Uttag/Retur/Inv",
+    "MeritWeb/rekvisition": "Rekvisition",
+    "MeritWeb/inventering": "Inventering",
+    "MeritWeb/retur": "Uttag/retur",
+    "MeritWeb/felanmalan": "Felanmälan",
+    "MeritWeb/uttag": "Uttag/retur",
+    "Felanmälan": "MeritWeb/felanmalan"
   },
   "pageUrls": {
-    "errorReport": "felanmalan",
-    "return": "uttag",
-    "inventory": "inventering",
-    "returnInv": "returnInventory",
-    "rekvisition": "rekvisition"
+    "errorReport": "MeritWeb/felanmalan",
+    "return": "MeritWeb/uttag",
+    "inventory": "MeritWeb/inventering",
+    "returnInv": "MeritWeb/returnInventory",
+    "rekvisition": "MeritWeb/rekvisition"
   },
   "components": {
     "login": "Logga in",

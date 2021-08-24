@@ -13,7 +13,7 @@ class UserNameService {
   }
 
   public valideringLoggedInUser = async (
-    token?: string,
+    token?: string | null,
     username?: string
   ): Promise<HTTPResponse<boolean>> => {
     let isUserNameValid: boolean = false;
@@ -26,27 +26,25 @@ class UserNameService {
         `Tabelldata/ValideraForradsinloggning?anvandarNamn=${username}`,
         authentication
       );
-      isUserNameValid = response.data;
-      return new HTTPResponse(isUserNameValid);
+
+      isUserNameValid = response?.data;
+      return response?.data;
     } catch (err) {
       const { response } = err;
       if (!response) {
-        return new HTTPResponse(
-          isUserNameValid,
-          Errors.INTERNAL_SERVER_ERROR as number
-        );
+        return response?.data;
       }
 
       const error =
-        Object.values(Errors).indexOf(response.status) > -1
-          ? response.status
+        Object.values(Errors).indexOf(response?.status) > -1
+          ? response?.status
           : Errors.INTERNAL_SERVER_ERROR;
       return new HTTPResponse(isUserNameValid, error);
     }
   };
 
   public getUserByPersonalNumber = async (
-    token?: string,
+    token?: string | null,
     personalNumber?: number
   ): Promise<HTTPResponse<LoginData>> => {
     let loginData: LoginData = {
@@ -66,6 +64,7 @@ class UserNameService {
         authentication
       );
       loginData = response.data;
+
       return new HTTPResponse(loginData);
     } catch (err) {
       const { response } = err;
@@ -85,7 +84,7 @@ class UserNameService {
   };
 
   public getExternalUsername = async (
-    token?: string,
+    token?: string | null,
     username?: string
   ): Promise<HTTPResponse<Info>> => {
     let userNameInfo: Info = {

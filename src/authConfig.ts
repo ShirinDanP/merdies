@@ -7,7 +7,7 @@ export const msalConfig: Configuration = {
     clientId: CSS_CONFIG.CLIENTID,
     authority: CSS_CONFIG.AUTHORITY,
     redirectUri: CSS_CONFIG.REDIRECTURI,
-    postLogoutRedirectUri: "/",
+    postLogoutRedirectUri: "/MeritWeb/",
   },
   cache: {
     cacheLocation: "localStorage",

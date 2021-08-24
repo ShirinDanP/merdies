@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useMsal } from "@azure/msal-react";
+import { RouteComponentProps } from "@reach/router";
 
 import LogoIcon from "../assets/logoicon.svg";
 
@@ -41,7 +42,7 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-const Login: React.FC = (): JSX.Element => {
+const Login: React.FC<RouteComponentProps> = (): JSX.Element => {
   const { t } = useTranslation();
   const classes = useStyles();
   const { instance } = useMsal();

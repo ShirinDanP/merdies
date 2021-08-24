@@ -10,6 +10,7 @@ import {
   makeStyles,
   createStyles,
 } from "@material-ui/core";
+import { Link } from "@reach/router";
 
 import { PageValues } from "../../types/types";
 
@@ -22,6 +23,11 @@ interface MenuExpansionProps {
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    linkContainer: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-end",
+    },
     list: {
       width: "100%",
       padding: "0",
@@ -32,8 +38,16 @@ const useStyles = makeStyles((theme) =>
       marginRight: "10px",
     },
     itemText: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      textDecoration: "none",
+      fontFamily: "Arial",
       textAlign: "right",
+      color: "white",
+      fontSize: "1rem",
     },
+
     divider: {
       backgroundColor: theme.palette.secondary.contrastText,
     },
@@ -55,15 +69,22 @@ const MenuExpansion: React.FC<MenuExpansionProps> = ({
         {showPageTitle !== t("meritTitle") && (
           <>
             {Object.keys(pageValues).map((key: string, index: number) => (
-              <ListItem button key={index}>
-                <ListItemText
+              <ListItem button key={index} className={classes.linkContainer}>
+                {/* <ListItemText
                   className={classes.itemText}
                   primary={pageValues[key]}
                   onClick={() => onClickNavigationButton(key)}
-                />
+                /> */}
+                <Link
+                  to={key}
+                  className={classes.itemText}
+                  onClick={() => onClickNavigationButton(key)}
+                >
+                  {pageValues[key]}
+                </Link>
               </ListItem>
             ))}
-            
+
             <Divider className={classes.divider} />
           </>
         )}

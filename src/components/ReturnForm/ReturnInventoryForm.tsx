@@ -7,7 +7,6 @@ import useInventory from "../../hooks/useInventory";
 import useReturn from "../../hooks/useReturn";
 import ErrorOrSuccessMsg from "../Error/ErrorOrSuccessMsg";
 import useShowModalMessage from "../../hooks/useShowModalMessage";
-import { navigate } from "@reach/router";
 import Modal from "../Modal";
 import Spinner from "../Spinner";
 

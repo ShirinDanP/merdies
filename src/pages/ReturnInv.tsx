@@ -9,6 +9,7 @@ import { loginRequest } from "../authConfig";
 import NavBar from "../components/NavBar/NavBar";
 import ReturnInventoryForm from "../components/ReturnForm/ReturnInventoryForm";
 import { useAuthContext } from "../contexts/authContext";
+import { RouteComponentProps } from "@reach/router";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -18,7 +19,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const ReturnInv: React.FC = (): JSX.Element => {
+const ReturnInv: React.FC<RouteComponentProps> = (): JSX.Element => {
   const classes = useStyles();
   const { accessToken, sessionId } = useAuthContext();
 

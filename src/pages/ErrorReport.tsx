@@ -2,6 +2,7 @@ import React from "react";
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
 import { InteractionType } from "@azure/msal-browser";
 import { createStyles, makeStyles } from "@material-ui/core";
+import { RouteComponentProps } from "@reach/router";
 
 import { Loading } from "../components/Loading";
 import { ErrorComponent } from "../components/Error/ErrorComponent";
@@ -18,7 +19,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const ErrorReport: React.FC = (): JSX.Element => {
+const ErrorReport: React.FC<RouteComponentProps> = (): JSX.Element => {
   const classes = useStyles();
   const { accessToken, sessionId } = useAuthContext();
 
@@ -32,6 +33,7 @@ const ErrorReport: React.FC = (): JSX.Element => {
       errorComponent={ErrorComponent}
       loadingComponent={Loading}
     >
+      
       <div className={classes.container}>
         <ErrorReportForm sessionId={sessionId} accessToken={accessToken} />
       </div>

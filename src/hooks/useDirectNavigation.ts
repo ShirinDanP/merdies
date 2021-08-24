@@ -21,6 +21,7 @@ const useDirectNavigation = (): [
     const translatedPageContext = pageContext
       ? t(`pageUrls.${pageContext}`)
       : pageContext;
+
     navigate(`${translatedPageContext}`);
   };
 

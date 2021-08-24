@@ -12,6 +12,7 @@ import {
   UnauthenticatedTemplate,
 } from "@azure/msal-react";
 import { useTranslation } from "react-i18next";
+import { RouteComponentProps } from "@reach/router";
 
 import useDirectNavigation from "../hooks/useDirectNavigation";
 import usePageValues from "../hooks/usePageValues";
@@ -35,7 +36,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const LandingPage: React.FC = (): JSX.Element => {
+const LandingPage: React.FC<RouteComponentProps> = (): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [{ pageValues }] = usePageValues();

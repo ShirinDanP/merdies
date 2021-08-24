@@ -55,7 +55,6 @@ const RekvisitionForm: React.FC<RekvisitionProps> = ({
 }): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
-
   const requisitionNr = localStorage.getItem("requisitionNr");
   const [{ utforUttag, getUtforUttagResponse, openModal }] = useReturn({
     sessionId,

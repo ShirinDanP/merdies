@@ -1,8 +1,7 @@
-import react, { useState, ChangeEvent } from "react";
+import react, { useState, ChangeEvent, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TextField, Button, createStyles, makeStyles } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { navigate } from "@reach/router";
 
 import useReturn from "../../hooks/useReturn";
 import FieldWithScanner from "../Scanner/FieldWithScanner";
@@ -16,11 +15,16 @@ import { ObjectIdData } from "../../services/ErrorReport/model";
 import useShowModalMessage from "../../hooks/useShowModalMessage";
 import Modal from "../Modal";
 import Spinner from "../Spinner";
-import useUserName from "../../hooks/useUserName";
 
 interface ReturnProps {
   accessToken: string | null;
   sessionId: string;
+  isUserNameValid: boolean;
+  newSessionId: string;
+  clickedOnUser: boolean;
+  onPersonalNumberchange: (
+    event: React.FormEvent<HTMLInputElement> | any
+  ) => void;
 }
 
 const useStyles = makeStyles(() =>
@@ -51,6 +55,10 @@ const useStyles = makeStyles(() =>
 const ReturnForm: React.FC<ReturnProps> = ({
   sessionId,
   accessToken,
+  isUserNameValid,
+  newSessionId,
+  clickedOnUser,
+  onPersonalNumberchange,
 }): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -69,7 +77,7 @@ const ReturnForm: React.FC<ReturnProps> = ({
   };
   const [rekvisionData, setRekvisionData] =
     useState<RekvisionData>(initialValue);
-
+  const [userName, setUserName] = useState<string>("");
   const [
     {
       objectIdInfoResult,
@@ -88,14 +96,14 @@ const ReturnForm: React.FC<ReturnProps> = ({
     workNumber: rekvisionData?.aonr,
     accessToken,
     objectId: rekvisionData?.objektId,
-    sessionId,
+    sessionId: newSessionId.length > 0 ? newSessionId : sessionId,
   });
 
   const [{ isLoading, setIsLoading }] = useShowModalMessage({
     response,
   });
-  const [{ clickedOnUser }] = useUserName({});
 
+  const [inputtextLoading, setInputtextLoading] = useState<boolean>(false);
   const handleInputChange =
     (field: string) => (event: React.FormEvent<HTMLInputElement> | any) => {
       setRekvisionData((prevState) => ({
@@ -130,25 +138,39 @@ const ReturnForm: React.FC<ReturnProps> = ({
     createRekvision();
   };
 
+  const onChangeUserName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onPersonalNumberchange(event?.target?.value || userName);
+    setRekvisionData((prevState) => ({
+      ...prevState,
+      sessionsId: newSessionId.length > 0 ? newSessionId : sessionId,
+    }));
+    setUserName(event.target.value);
+    setInputtextLoading(true);
+    setTimeout(() => {
+      setInputtextLoading(false);
+    }, 5000);
+  };
   return (
     <form className={classes.root} noValidate>
-      {clickedOnUser && (
+      {isUserNameValid === true && clickedOnUser && (
         <FieldWithScanner
           name="userName"
           location="return"
-          articleId={rekvisionData?.username as any}
-          onChange={(
-            event: React.ChangeEvent<HTMLInputElement>,
-            value: string
-          ) => onFieldChange(event, value, "username")}
-          setValue={(data: string) =>
+          articleId={userName}
+          loading={inputtextLoading}
+          onChange={onChangeUserName}
+          setValue={(data: string) => {
+            onPersonalNumberchange(data);
             setRekvisionData((prevState) => ({
               ...prevState,
-              sessionsId: sessionId,
-              username: data,
-            }))
-          }
-          getOptionLabel={(options: Info) => options.Description}
+              sessionsId: newSessionId.length > 0 ? newSessionId : sessionId,
+            }));
+            setUserName(data);
+            setInputtextLoading(true);
+            setTimeout(() => {
+              setInputtextLoading(false);
+            }, 5000);
+          }}
         />
       )}
       <FieldWithScanner

@@ -6,7 +6,7 @@ interface Config {
   AUTHORITY: string;
   REDIRECTURI: string;
   SCOPES: string[];
-  GRAPHCONFIG: string[]
+  GRAPHCONFIG: string[];
 }
 
 declare const CSS_CONFIG: Config;

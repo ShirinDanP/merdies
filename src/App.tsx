@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
-import { useHistory, BrowserRouter, Switch } from "react-router-dom";
-import { Router } from "@reach/router";
+import {
+  Router,
+  createMemorySource,
+  createHistory,
+  LocationProvider,
+  Redirect,
+  navigate,
+} from "@reach/router";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { IPublicClientApplication } from "@azure/msal-browser";
@@ -15,12 +22,14 @@ import Return from "./pages/Return";
 import ErrorReport from "./pages/ErrorReport";
 import ReturnInv from "./pages/ReturnInv";
 import Rekvisition from "./pages/Rekvisition";
-import { Route } from "./components/Route";
 import NavBar from "./components/NavBar/NavBar";
 
 import { CustomNavigationClient } from "./utils/NavigationClient";
 import { AuthContextProvider } from "./contexts/authContext";
 import "./styles/globalStyle.css";
+import { useHistory } from "react-router";
+
+/* globals CSS_CONFIG */
 
 interface AppProps {
   pca: IPublicClientApplication;
@@ -29,41 +38,46 @@ interface AppProps {
 const App: React.FC<any> = ({ pca }: AppProps): JSX.Element => {
   const { t } = useTranslation();
   const history = useHistory();
+
   const location = useLocation();
   const navigationClient = new CustomNavigationClient(history);
   pca.setNavigationClient(navigationClient);
 
+ 
+  useEffect(() => {
+    if (
+      window.location.href.split("/").filter(function (item, i, allItems) {
+        return i !== allItems.indexOf(item);
+      }).length > 0
+    ) {
+      navigate(
+        window.location.href
+          .split("/")
+          .filter(function (item, i, allItems) {
+            return i == allItems.indexOf(item);
+          })
+          .join("/")
+      );
+    }
+  });
   return (
     <MsalProvider instance={pca}>
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <AuthContextProvider>
-          <BrowserRouter>
-            {location.location.pathname === "/" ||
-            !location.location.pathname ? null : (
-              <NavBar />
-            )}
-            <Router>
-              <Route path="/" component={LandingPage} />
-              <Route
-                path={`/${t("pageUrls.inventory")}`}
-                component={Inventory}
-              />
-              <Route path={`/${t("pageUrls.return")}`} component={Return} />
-              <Route
-                path={`/${t("pageUrls.errorReport")}`}
-                component={ErrorReport}
-              />
-              <Route
-                path={`/${t("pageUrls.returnInv")}`}
-                component={ReturnInv}
-              />
-              <Route
-                path={`/${t("pageUrls.rekvisition")}`}
-                component={Rekvisition}
-              />
-            </Router>
-          </BrowserRouter>
+          {location.location.pathname === "/MeritWeb/" ||
+          !location.location.pathname ? null : (
+            <NavBar />
+          )}
+          <Router>
+            <Redirect from="/" to="/MeritWeb" noThrow={true} />
+            <LandingPage path="MeritWeb" />
+            <Inventory path={`${t("pageUrls.inventory")}`} />
+            <Return path={`${t("pageUrls.return")}`} />
+            <ErrorReport path={`${t("pageUrls.errorReport")}`} />
+            <ReturnInv path={`${t("pageUrls.returnInv")}`} />
+            <Rekvisition path={`${t("pageUrls.rekvisition")}`} />
+          </Router>
         </AuthContextProvider>
       </ThemeProvider>
     </MsalProvider>

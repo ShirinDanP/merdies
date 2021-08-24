@@ -5,12 +5,19 @@
   },
   "meritTitle": "Merit",
   "pageValues": {
+    "MeritWeb/": "Merit",
     "errorReport": "Error Report",
     "inventory": "Inventory",
     "return": "return",
     "logOut": "Log out",
     "returnInventory": "Uttag/Retur/Inv",
-    "rekvisition": "Rekvisition"
+    "rekvisition": "Rekvisition",
+    "MeritWeb/errorReport": "Error Report",
+    "MeritWeb/inventory": "Inventory",
+    "MeritWeb/return": "return",
+    "MeritWeb/logOut": "Log out",
+    "MeritWeb/returnInventory": "Uttag/Retur/Inv",
+    "MeritWeb/rekvisition": "Rekvisition"
   },
   "pageUrls": {
     "errorReport": "errorReport",

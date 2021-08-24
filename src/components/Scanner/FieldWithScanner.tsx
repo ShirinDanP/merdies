@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { mdiQrcodeScan } from "@mdi/js";
 import { useTranslation } from "react-i18next";
 import Icon from "@mdi/react";
-import { TextField, Button, makeStyles, createStyles } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  makeStyles,
+  createStyles,
+  CircularProgress,
+} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import Spinner from "../Spinner";
 
@@ -23,6 +29,7 @@ interface FieldWithScannerProps {
   searchResult?: any[];
   getOptionLabel?: (options: any) => string;
   open?: boolean;
+  loading?: boolean;
 }
 
 const useStyles = makeStyles(() =>
@@ -38,6 +45,13 @@ const useStyles = makeStyles(() =>
       padding: "5px",
       boxShadow: "none",
     },
+    spinner: {
+      position: "absolute",
+      left: "112px",
+      top: "-22px",
+      float: "right",
+      width: "100px",
+    },
   })
 );
 
@@ -45,6 +59,7 @@ const FieldWithScanner: React.FC<FieldWithScannerProps> = ({
   name,
   articleId,
   location,
+  loading,
   onChange,
   onBlur,
   setValue,
@@ -56,7 +71,6 @@ const FieldWithScanner: React.FC<FieldWithScannerProps> = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const [openQrScanner, setOpenQrScanner] = useState<boolean>(false);
-
   const onClickButton = () => {
     setOpenQrScanner(!openQrScanner);
   };
@@ -69,6 +83,7 @@ const FieldWithScanner: React.FC<FieldWithScannerProps> = ({
   const handleError = (err: any) => {
     console.error(err);
   };
+
   return (
     <>
       <div className={classes.objectIdStyle}>
@@ -103,17 +118,20 @@ const FieldWithScanner: React.FC<FieldWithScannerProps> = ({
             )}
           />
         ) : (
-          <TextField
-            id={name}
-            label={t(`components.${location}.fields.${name}`)}
-            type="search"
-            variant="outlined"
-            fullWidth
-            InputLabelProps={{ shrink: true, style: { color: "black" } }}
-            value={articleId}
-            onChange={onChange as any}
-            onBlur={onBlur}
-          />
+          <>
+            <TextField
+              id={name}
+              label={t(`components.${location}.fields.${name}`)}
+              type="search"
+              variant="outlined"
+              fullWidth
+              InputLabelProps={{ shrink: true, style: { color: "black" } }}
+              value={articleId}
+              onChange={onChange as any}
+              onBlur={onBlur}
+            />
+            {loading ? <CircularProgress color="secondary" /> : null}
+          </>
         )}
 
         <Button
